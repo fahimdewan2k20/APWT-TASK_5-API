@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link
+            rel="stylesheet"
+            href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+            integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+            crossorigin="anonymous"
+        />
+        <title>UMS - Notice</title>
+    </head>
+    <body>
+        <h2>Notices</h2>
+        <div id="notices"></div>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                loadNotices = () => {
+                    const request = new XMLHttpRequest();
+                    request.open(
+                        "POST",
+                        "http://127.0.0.1:8000/api/teacher/fahim/notice"
+                    );
+
+                    request.onload = () => {
+                        const data = JSON.parse(request.responseText);
+                        data.forEach((notice) => {
+                            document.querySelector("#notices").innerHTML += `
+                            <ul class="d-flex flex-row align-items-left justify-content-center">
+                                <li class="w-50"><a class="" href="#">${notice.title}</a></li>
+                                <li class="w-50">${notice.upload_time}</li>
+                            </ul>
+                            `;
+                        });
+                    };
+
+                    const data = new FormData();
+                    data.append("course_id", "csc_2210");
+
+                    request.send(data);
+                    return false;
+                };
+
+                loadNotices();
+            });
+        </script>
+    </body>
+</html>
